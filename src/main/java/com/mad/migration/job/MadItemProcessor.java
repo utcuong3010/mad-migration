@@ -13,7 +13,7 @@ import com.mad.migration.temp.AssetBuilderService;
 public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgram> {
 	
 
-	@Value("${mad.migration.out}")
+	@Value("${mad.migration.homeDir}")
 	private String migrationOutputDir;	
 	
 

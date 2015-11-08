@@ -1,26 +1,17 @@
 package com.mad.migration.event;
 
-import java.util.Date;
-
 import org.springframework.context.ApplicationEvent;
 
 public class ItemReadEvent extends ApplicationEvent {
 	
-	private Date time;
+	private Object item;
 	
-	
-	public ItemReadEvent(Object source, Date time) {
+	public ItemReadEvent(Object source, Object item ) {
 		super(source);
-		this.time = time;
+		this.item = item;
 	}
-	
-	
-	public Date getTime() {
-		return time;
-	}
-	
-	
 
-	
-	
+	public Object getItem() {
+		return item;
+	}
 }

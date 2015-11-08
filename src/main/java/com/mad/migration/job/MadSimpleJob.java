@@ -59,7 +59,7 @@ public abstract class MadSimpleJob implements Job{
 			while(isContinue) {
 				inItem = getReader().read();
 				if(inItem != null) {
-					applicationEventMulticaster.multicastEvent(new ItemReadEvent(inItem, new Date()));//publish event read										
+					applicationEventMulticaster.multicastEvent(new ItemReadEvent(this,inItem));//publish event read										
 					outItem = getProcessor().process(inItem);//process item									
 				} else {
 					//stop

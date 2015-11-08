@@ -34,11 +34,12 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if(bean.getClass().isAnnotationPresent(MadJob.class)) {
-
 			MadJob madJob = bean.getClass().getAnnotation(MadJob.class);
-			//set job name
-			Job job = (Job)bean;
-			jobs.add(job);
+			if(madJob.enable()) {
+				//set job name
+				Job job = (Job)bean;
+				jobs.add(job);
+			}
 		}
 		return bean;
 	}
