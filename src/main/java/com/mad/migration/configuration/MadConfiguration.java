@@ -37,10 +37,11 @@ public class MadConfiguration implements InitializingBean{
 	}
 	
 	public void madInitializer() {
+		FileUtils.deleteFolder(homeDirectory);
 		//remove home directory
-		FileUtils.createDirectory(homeDirectory);
 		//create read-data
 		FileUtils.createDirectory(homeDirectory + File.separator + "read-data");
+		FileUtils.createDirectory(homeDirectory + File.separator + "report-data");
 		
 		
 	}

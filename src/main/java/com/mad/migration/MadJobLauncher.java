@@ -38,6 +38,7 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 			if(madJob.enable()) {
 				//set job name
 				Job job = (Job)bean;
+				job.setJobName(madJob.name());
 				jobs.add(job);
 			}
 		}
@@ -56,9 +57,9 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 			taskExecutor.execute(new Runnable() {				
 				@Override
 				public void run() {					
-					logger.info("Job: {} launched" , job.getName());										
+					logger.info("Job: {} launched" , job.getJobName());										
 					job.execute();
-					logger.info("Job: {} completed ", job.getName());					
+					logger.info("Job: {} completed with execution {} ", job.getJobName(), job.getLastExecution());					
 					//fire event to verify each job
 					
 				}

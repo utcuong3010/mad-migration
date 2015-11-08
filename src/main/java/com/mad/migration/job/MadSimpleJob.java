@@ -8,9 +8,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ApplicationEventMulticaster;
 
 import com.mad.migration.event.ItemReadEvent;
+import com.mad.migration.event.JobExecutionEvent;
 import com.mad.migration.job.item.ItemProcessor;
 import com.mad.migration.job.item.ItemReader;
 import com.mad.migration.job.item.ItemWriter;
@@ -20,13 +22,22 @@ public abstract class MadSimpleJob implements Job{
 	
 	private Logger logger = LoggerFactory.getLogger(MadSimpleJob.class);
 	
-	private final int chunkSize = 2;
+
+	private String jobName;
+	
+	@Value("${mad.migration.chunkSize:5}")
+	private int chunkSize;
 	
 	
 	@Autowired
 	private ApplicationEventMulticaster applicationEventMulticaster;
 
-	
+	private volatile JobExecution jobExecution = new JobExecution();
+	@Override
+	public JobExecution getLastExecution() {
+
+		return jobExecution;
+	}
 	
 	@Autowired
 	private ItemProcessor itemProcessor;
@@ -40,6 +51,14 @@ public abstract class MadSimpleJob implements Job{
 		return itemWriter;
 	}
 	
+	@Override
+	public void setJobName(String jobName) {
+		this.jobName = jobName;		
+	}
+	@Override
+	public String getJobName() {
+		return jobName;
+	}
 	
 	/***
 	 *  we must override for specific each vendor 
@@ -52,6 +71,9 @@ public abstract class MadSimpleJob implements Job{
 	public void execute() {
 		try {		
 			//read
+			jobExecution = new JobExecution();
+			jobExecution.setJobStatus(JobStatus.RUNNING);
+			jobExecution.setStartTime(new Date());
 			boolean isContinue = true;
 			Object inItem = null;
 			Object outItem = null;
@@ -59,7 +81,7 @@ public abstract class MadSimpleJob implements Job{
 			while(isContinue) {
 				inItem = getReader().read();
 				if(inItem != null) {
-					applicationEventMulticaster.multicastEvent(new ItemReadEvent(this,inItem));//publish event read										
+					applicationEventMulticaster.multicastEvent(new ItemReadEvent(this,jobName,inItem));//publish event read										
 					outItem = getProcessor().process(inItem);//process item									
 				} else {
 					//stop
@@ -75,15 +97,26 @@ public abstract class MadSimpleJob implements Job{
 					}
 				} else if(items.size() > 0) {
 					getWriter().write(items);//write them
-				}			
+				}	
+				//
+				
 				//repeat again
 				inItem = null;
 				outItem = null;
 			}
 			
+			jobExecution.setEndTime(new Date());
+			jobExecution.setJobStatus(JobStatus.COMPLETED);
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,jobExecution));
+			
 		} catch (Exception ex) {		
-			logger.error("Job {} with error {}", getName(),ex);			
+			logger.error("Job {} running with error {}", getJobName(),ex);	
+			
+			jobExecution.setEndTime(new Date());
+			jobExecution.setJobStatus(JobStatus.ERROR);
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,jobExecution));
 		}
+		
 	}
 	
 }

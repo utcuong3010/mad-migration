@@ -5,9 +5,10 @@ package com.mad.migration.job;
  * @author utcuong3010
  *
  */
-public interface Job {
+public interface Job extends JobNameAWare{
 	
-	String getName();
+	String getJobName();
 	void execute();
+	JobExecution getLastExecution();
 
 }

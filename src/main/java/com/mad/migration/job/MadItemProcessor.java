@@ -26,7 +26,7 @@ public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgra
 	public VendorProgram process(MadItemData item) throws Exception {
 		
 		System.err.println(" process item");
-		Thread.sleep(3000);
+		Thread.sleep(100);
 		return new VendorProgram();
 		
 		

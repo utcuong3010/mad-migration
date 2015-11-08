@@ -9,13 +9,9 @@ import com.mad.migration.job.item.ItemReader;
 @MadJob(name="TMS",enable=true)
 public class TmsJob extends MadSimpleJob {
 	
+
 	@Autowired
 	private TmsItemReader tmsItemReader;
-
-	@Override
-	public String getName() {
-		return "TMSVendor";
-	}
 
 	@Override
 	public ItemReader getReader() {

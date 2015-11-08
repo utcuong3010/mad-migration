@@ -6,18 +6,13 @@ import com.mad.migration.annotation.MadJob;
 import com.mad.migration.job.MadSimpleJob;
 import com.mad.migration.job.item.ItemReader;
 
-@MadJob(name="DTVVendor", enable=false)
+@MadJob(name="Dtv", enable=false)
 public class DtvJob extends MadSimpleJob {
 	
 	
 	@Autowired
 	private DtvItemReader dtvItemReader;
-
-	@Override
-	public String getName() {
-		return "Dtv Vendor";
-	}
-
+	
 	@Override
 	public ItemReader getReader() {
 		return dtvItemReader;

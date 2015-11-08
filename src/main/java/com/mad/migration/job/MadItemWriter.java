@@ -40,7 +40,7 @@ public class MadItemWriter implements ItemWriter<VendorProgram> {
 		
 		
 		System.err.println(" write item" + items) ;
-		Thread.sleep(3000);
+		Thread.sleep(100);
 		
 		
 		
