@@ -11,7 +11,8 @@ public class JobExecutionListener implements ApplicationListener<JobExecutionEve
 	@Override
 	public void onApplicationEvent(JobExecutionEvent jobExecutionEvent) {
 		// TODO Auto-generated method stub
-		System.err.println("job execution event" + jobExecutionEvent.getJobExecution());
+		//trigger verify data
+		System.err.println("verify data trigger");
 		
 	}
 	

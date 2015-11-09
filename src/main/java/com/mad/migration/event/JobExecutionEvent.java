@@ -1,21 +1,14 @@
 package com.mad.migration.event;
 
-import org.springframework.context.ApplicationEvent;
-
 import com.mad.migration.job.JobExecution;
 
-public class JobExecutionEvent extends ApplicationEvent{
+public class JobExecutionEvent extends BaseEvent{
 
-	private String jobName;
-	private JobExecution jobExecution;
-	public JobExecutionEvent(Object source, String jobName, JobExecution jobExecution) {
-		super(source);
-		this.jobName = jobName;
-		this.jobExecution = jobExecution;
-	}
 	
-	public String getJobName() {
-		return jobName;
+	private JobExecution jobExecution;
+	public JobExecutionEvent(Object source, String jobName, int totalItem, JobExecution jobExecution) {
+		super(source,jobName,totalItem);		
+		this.jobExecution = jobExecution;
 	}
 	
 	public JobExecution getJobExecution() {

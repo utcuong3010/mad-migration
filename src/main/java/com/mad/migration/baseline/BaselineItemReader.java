@@ -1,4 +1,4 @@
-package com.mad.migration.dtv;
+package com.mad.migration.baseline;
 
 import org.springframework.stereotype.Component;
 
@@ -7,12 +7,12 @@ import com.mad.migration.domain.Vendor;
 import com.mad.migration.job.item.ItemReader;
 
 @Component
-public class DtvItemReader implements ItemReader<MadItemData> {
+public class BaselineItemReader implements ItemReader<MadItemData> {
 
-	private int totalItems = 10;
+	private int totalItems = 3;
 	private int count = 0;
 	
-	public DtvItemReader() {
+	public BaselineItemReader() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -20,10 +20,10 @@ public class DtvItemReader implements ItemReader<MadItemData> {
 	public MadItemData read() throws Exception {
 		// TODO Auto-generated method stub
 		if(++count<totalItems) {
-			System.err.println("DTV read item");
+			System.err.println("Baseline read item");
 			
 			MadItemData item = new MadItemData();
-			item.setVendor(new Vendor("DTV", "DTV", "DTV_thumbnail"));
+			item.setVendor(new Vendor("Baseline", "Baseline", "Baseline_thumbnail"));
 			
 			return item;
 		} else {

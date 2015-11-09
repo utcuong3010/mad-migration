@@ -57,11 +57,14 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 			taskExecutor.execute(new Runnable() {				
 				@Override
 				public void run() {					
-					logger.info("Job: {} launched" , job.getJobName());										
-					job.execute();
+					logger.info("Job: {} launched" , job.getJobName());	
+					try {
+						job.execute();
+					}catch(Exception ex) {
+						logger.error("Job {} running with error {}",job.getJobName(),ex);	
+					}
 					logger.info("Job: {} completed with execution {} ", job.getJobName(), job.getLastExecution());					
-					//fire event to verify each job
-					
+					//fire event to verify each job					
 				}
 			});			
 		}		

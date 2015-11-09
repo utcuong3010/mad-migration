@@ -25,6 +25,7 @@ public class ItemReadListener implements ApplicationListener<ItemReadEvent> {
 		// write into log
 		FileUtils.writeLog(homeDirectory + File.separator + "read-data" + File.separator + event.getJobName() + ".csv",
 				event.getItem().toString());
+		
 
 	}
 

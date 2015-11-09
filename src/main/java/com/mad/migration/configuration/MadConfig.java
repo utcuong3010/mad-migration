@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.mad.migration.utils.FileUtils;
 
 @Component
-public class MadConfiguration implements InitializingBean{
+public class MadConfig implements InitializingBean{
 
 	@Value("${mad.migration.homeDir}")
 	private String homeDirectory;
@@ -24,7 +24,7 @@ public class MadConfiguration implements InitializingBean{
 		ThreadPoolTaskExecutor threadPoolExecutor = new ThreadPoolTaskExecutor();
 		threadPoolExecutor.setCorePoolSize(10);
 		threadPoolExecutor.setMaxPoolSize(20);
-		threadPoolExecutor.setQueueCapacity(0);		
+		threadPoolExecutor.setQueueCapacity(20);		
 		threadPoolExecutor.initialize();
 		return threadPoolExecutor;
 	}
@@ -41,6 +41,7 @@ public class MadConfiguration implements InitializingBean{
 		//remove home directory
 		//create read-data
 		FileUtils.createDirectory(homeDirectory + File.separator + "read-data");
+		FileUtils.createDirectory(homeDirectory + File.separator + "error-data");
 		FileUtils.createDirectory(homeDirectory + File.separator + "report-data");
 		
 		

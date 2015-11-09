@@ -38,45 +38,41 @@ public class MadItemWriter implements ItemWriter<VendorProgram> {
 	@Override
 	public void write(List<? extends VendorProgram> items) throws Exception {
 		
-		
-		System.err.println(" write item" + items) ;
-		Thread.sleep(100);
-		
-		
-		
-		
-		
-//		for (VendorProgram program: items) {
-//			//save program
-//			jdbcTemplate.update(INSERT_VENDOR_PROGRAM,
-//					program.getVendorKey(),program.getProgramId(),program.getProgramVersion(),program.getRootId(),program.getProgramType(),program.getCreatedDate());
-//			
-//			//save media
-//			jdbcTemplate.update(INSERT_VENDOR_MEDIA,program.getVendorKey(),program.getMediaId(),program.getMediaVersion(),program.getAssetDirectLink(),program.getAssetIdentifier(),
-//					program.getAssetUniversalLink(),program.getThumbnailAssetLink(),program.getMediaWidth(),program.getMediaHeight(),program.getMd5Hash(),
-//					program.getMediaState(),program.getMediaAction(),program.getCreatedDate(),program.getImageAspectRatio(),program.getImageOrientation(),program.getImageType(),program.getImageFormat(),program.getImageCategory());
-//			
-//			//save mapping base on which type
-//			
-//			switch (program.getProgramType()) {
-//			case MOVIE:
-//				
-//				jdbcTemplate.update(INSERT_MOVIE_MEDIA_MAPPING,program.getVendorKey(), program.getProgramId(),program.getProgramId(),program.getProgramVersion(),program.getMediaId(),program.getMediaVersion(),program.getImageCategory(),program.getCreatedDate());
-//				
-//				break;
-//			case SHOW:
-//				jdbcTemplate.update(INSERT_SHOW_MEDIA_MAPPING,program.getVendorKey(), program.getProgramId(),program.getProgramId(),program.getProgramVersion(),program.getMediaId(),program.getMediaVersion(),program.getImageCategory(),program.getCreatedDate());
-//				
-//				break;
-//			case EPISODE:
-//				
-//				jdbcTemplate.update(INSERT_EPISODE_MEDIA_MAPPING,program.getVendorKey(), program.getProgramId(),program.getProgramId(),program.getProgramVersion(),program.getMediaId(),program.getMediaVersion(),program.getImageCategory(),program.getCreatedDate());
-//				break;
-//			default:
-//				break;
-//			}
-//			
-//		}
+		System.err.println("writer.....:" +  items);
+	
+		/*
+		for (VendorProgram program: items) {
+			//save program
+			jdbcTemplate.update(INSERT_VENDOR_PROGRAM,
+					program.getVendorKey(),program.getProgramId(),program.getProgramVersion(),program.getRootId(),program.getProgramType(),program.getCreatedDate());
+			
+			//save media
+			jdbcTemplate.update(INSERT_VENDOR_MEDIA,program.getVendorKey(),program.getMediaId(),program.getMediaVersion(),program.getAssetDirectLink(),program.getAssetIdentifier(),
+					program.getAssetUniversalLink(),program.getThumbnailAssetLink(),program.getMediaWidth(),program.getMediaHeight(),program.getMd5Hash(),
+					program.getMediaState(),program.getMediaAction(),program.getCreatedDate(),program.getImageAspectRatio(),program.getImageOrientation(),program.getImageType(),program.getImageFormat(),program.getImageCategory());
+			
+			//save mapping base on which type
+			switch (program.getProgramType()) {
+			case MOVIE:
+				
+				jdbcTemplate.update(INSERT_MOVIE_MEDIA_MAPPING,program.getVendorKey(), program.getProgramId(),program.getProgramId(),program.getProgramVersion(),program.getMediaId(),program.getMediaVersion(),program.getImageCategory(),program.getCreatedDate());
+				
+				break;
+			case SHOW:
+				jdbcTemplate.update(INSERT_SHOW_MEDIA_MAPPING,program.getVendorKey(), program.getProgramId(),program.getProgramId(),program.getProgramVersion(),program.getMediaId(),program.getMediaVersion(),program.getImageCategory(),program.getCreatedDate());
+				
+				break;
+			case EPISODE:
+				
+				jdbcTemplate.update(INSERT_EPISODE_MEDIA_MAPPING,program.getVendorKey(), program.getProgramId(),program.getProgramId(),program.getProgramVersion(),program.getMediaId(),program.getMediaVersion(),program.getImageCategory(),program.getCreatedDate());
+				break;
+			default:
+				break;
+			}
+			
+			
+		}
+		*/
 		
 	}
 }

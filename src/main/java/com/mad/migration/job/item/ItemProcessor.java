@@ -1,5 +1,7 @@
 package com.mad.migration.job.item;
 
+import com.mad.migration.exception.BusinessException;
+import com.mad.migration.exception.ErrorException;
 
 /**
  * process item
@@ -10,5 +12,5 @@ package com.mad.migration.job.item;
  */
 public interface ItemProcessor<I,O> {
 	
-	O process(I item) throws Exception;
+	O process(I item) throws BusinessException,ErrorException;
 }

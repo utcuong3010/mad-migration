@@ -8,7 +8,7 @@ package com.mad.migration.job;
 public interface Job extends JobNameAWare{
 	
 	String getJobName();
-	void execute();
+	void execute() throws Exception;
 	JobExecution getLastExecution();
 
 }

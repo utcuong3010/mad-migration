@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ApplicationEventMulticaster;
 
+import com.mad.migration.event.ItemErrorEvent;
 import com.mad.migration.event.ItemReadEvent;
 import com.mad.migration.event.JobExecutionEvent;
+import com.mad.migration.exception.BusinessException;
 import com.mad.migration.job.item.ItemProcessor;
 import com.mad.migration.job.item.ItemReader;
 import com.mad.migration.job.item.ItemWriter;
@@ -68,26 +70,35 @@ public abstract class MadSimpleJob implements Job{
 	
 
 	
-	public void execute() {
-		try {		
-			//read
-			jobExecution = new JobExecution();
-			jobExecution.setJobStatus(JobStatus.RUNNING);
-			jobExecution.setStartTime(new Date());
-			boolean isContinue = true;
-			Object inItem = null;
-			Object outItem = null;
-			List<Object> items = new ArrayList<>();
+	public void execute() throws Exception {
+		//read
+		jobExecution = new JobExecution();
+		jobExecution.setJobStatus(JobStatus.RUNNING);
+		jobExecution.setStartTime(new Date());
+		boolean isContinue = true;
+		Object inItem = null;
+		Object outItem = null;
+		List<Object> items = new ArrayList<>();
+		int totalItems = 0;
+		try {	
+			//get total items
+			totalItems = getReader().count();
+					
+			//do execute		
 			while(isContinue) {
 				inItem = getReader().read();
 				if(inItem != null) {
-					applicationEventMulticaster.multicastEvent(new ItemReadEvent(this,jobName,inItem));//publish event read										
-					outItem = getProcessor().process(inItem);//process item									
+					applicationEventMulticaster.multicastEvent(new ItemReadEvent(this,jobName,totalItems,inItem));//publish event read				
+					try {
+						outItem = getProcessor().process(inItem);//process item			
+					}catch(BusinessException  ex) {
+						applicationEventMulticaster.multicastEvent(new ItemErrorEvent(this, jobName,totalItems, inItem, ex));
+					}
 				} else {
 					//stop
 					isContinue = false;
 				}
-				//save in the chunk when chucksize is reached please commit the transaction unit
+				//save in the chunk when chuck-size is reached please commit the transaction unit
 				if(outItem != null) {
 					items.add(outItem);
 					if(items.size() == chunkSize) {
@@ -97,9 +108,7 @@ public abstract class MadSimpleJob implements Job{
 					}
 				} else if(items.size() > 0) {
 					getWriter().write(items);//write them
-				}	
-				//
-				
+				}					
 				//repeat again
 				inItem = null;
 				outItem = null;
@@ -107,14 +116,19 @@ public abstract class MadSimpleJob implements Job{
 			
 			jobExecution.setEndTime(new Date());
 			jobExecution.setJobStatus(JobStatus.COMPLETED);
-			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,jobExecution));
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,jobExecution));
 			
 		} catch (Exception ex) {		
-			logger.error("Job {} running with error {}", getJobName(),ex);	
-			
+						
 			jobExecution.setEndTime(new Date());
 			jobExecution.setJobStatus(JobStatus.ERROR);
-			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,jobExecution));
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,jobExecution));
+			
+			//commit writer
+			if(items.size() > 0) {
+				getWriter().write(items);//write them
+			}	
+			throw ex;
 		}
 		
 	}

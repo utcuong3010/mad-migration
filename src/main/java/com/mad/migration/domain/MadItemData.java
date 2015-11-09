@@ -3,7 +3,7 @@ package com.mad.migration.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.mad.migration.temp.SourceProgramType;
+import com.directv.apg.mad.general.domain.SourceProgramType;
 
 public class MadItemData implements Serializable {
 	

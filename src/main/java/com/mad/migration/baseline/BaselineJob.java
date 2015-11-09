@@ -1,4 +1,4 @@
-package com.mad.migration.dtv;
+package com.mad.migration.baseline;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -6,16 +6,16 @@ import com.mad.migration.annotation.MadJob;
 import com.mad.migration.job.MadSimpleJob;
 import com.mad.migration.job.item.ItemReader;
 
-@MadJob(name="Dtv", enable=true)
-public class DtvJob extends MadSimpleJob {
+@MadJob(name="baseline", enable=true)
+public class BaselineJob extends MadSimpleJob {
 	
 	
 	@Autowired
-	private DtvItemReader dtvItemReader;
+	private BaselineItemReader baselineItemReader;
 	
 	@Override
 	public ItemReader getReader() {
-		return dtvItemReader;
+		return baselineItemReader;
 	}
 
 	
