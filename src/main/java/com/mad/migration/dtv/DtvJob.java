@@ -6,7 +6,7 @@ import com.mad.migration.annotation.MadJob;
 import com.mad.migration.job.MadSimpleJob;
 import com.mad.migration.job.item.ItemReader;
 
-@MadJob(name="Dtv", enable=true)
+@MadJob(name="Dtv", enable=false)
 public class DtvJob extends MadSimpleJob {
 	
 	

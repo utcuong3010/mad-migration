@@ -24,7 +24,7 @@ import com.mad.migration.job.item.ItemProcessor;
 import com.mad.migration.utils.FileUtils;
 import com.mad.migration.utils.ImageUtil;
 
-@Component
+@Component(value="madItemProcessor")
 public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgram> {
 	
 

@@ -33,11 +33,10 @@ public class MigrationReport implements Report,ApplicationListener<ApplicationEv
 		MigrationInfo info = threadLocal.get();
 		String reportPath = homeDirectory + File.separator + "report-data" + File.separator + info.getName() + "_migration.txt";
 		
-		FileUtils.deleteFile(reportPath);
 	
 		// write into log
 		StringBuilder contentReportBuilder = new StringBuilder("\n");
-		contentReportBuilder.append("******************************STARTED Migration Report*****************************\n");
+		contentReportBuilder.append("******************************Migration Report*****************************\n");
 		contentReportBuilder.append("Name:" + info.getName() + "\n");
 		contentReportBuilder.append("Total:" + info.getTotal() + "\n");
 		contentReportBuilder.append("Migrated Items:" + (info.getTotal() - info.getFailedItems()) + "\n");
@@ -45,7 +44,7 @@ public class MigrationReport implements Report,ApplicationListener<ApplicationEv
 		contentReportBuilder.append("Status:" + info.getStatus() + "\n");
 		contentReportBuilder.append("Started Date:" + new SimpleDateFormat("dd-MM-yyy hh:mm").format(info.getStartDate())  + "\n");
 		contentReportBuilder.append("Ended Date:" + new SimpleDateFormat("dd-MM-yyy hh:mm").format(info.getEndDate())  + "\n");
-		contentReportBuilder.append("******************************ENDED Migration Report*****************************\n");
+		contentReportBuilder.append("******************************Migration Report*****************************\n");
 		
 		logger.info(contentReportBuilder.toString());
 				

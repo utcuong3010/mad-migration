@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.mad.migration.domain.VendorProgram;
 import com.mad.migration.job.item.ItemWriter;
 
-@Component
+@Component(value="madItemWriter")
 public class MadItemWriter implements ItemWriter<VendorProgram> {
 
 	@Autowired

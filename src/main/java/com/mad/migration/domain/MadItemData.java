@@ -1,9 +1,12 @@
 package com.mad.migration.domain;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.directv.apg.mad.general.domain.SourceProgramType;
+import com.mad.migration.utils.DateUtils;
 
 public class MadItemData implements Serializable {
 	
@@ -19,6 +22,8 @@ public class MadItemData implements Serializable {
 	private Date createdDate;
 	
 	private Vendor vendor;
+	
+	
 
 	public String getProgramId() {
 		return programId;
@@ -113,9 +118,29 @@ public class MadItemData implements Serializable {
 
 	@Override
 	public String toString() {
-		return programId + "," + rootId + "," + programVersion + "," + programType + "," + vendor.getVendorKey()
+		return programId + "," + rootId + "," + programVersion + "," + programType + "," + vendor.getVendorKey() + "," 
+				+ vendor.getContainerName() + "," + vendor.getThumbnailContainerName()
 				+ "," + mediaId + "," + mediaFilePath + "," + mediaVersion
 				+ "," + state + "," + md5 + "," + createdDate + " \n";
+	}
+	
+	public MadItemData recoveryData(String [] itemData) throws ParseException {
+		MadItemData item = new MadItemData();
+		item.setProgramId(itemData[0]);
+		item.setRootId(itemData[1]);
+		item.setProgramVersion(Integer.valueOf(itemData[2]));
+		item.setProgramType(SourceProgramType.valueOf(itemData[3]));
+		//vendor
+		Vendor vendor = new Vendor(itemData[4], itemData[5], itemData[6]);
+		item.setVendor(vendor);
+		item.setMediaId(itemData[7]);
+		item.setMediaFilePath(itemData[8]);
+		item.setMediaVersion(Integer.valueOf(itemData[9]));
+		item.setState(Integer.valueOf(itemData[10]));
+		item.setMd5(itemData[11]);
+		item.setCreatedDate(DateUtils.toDate(itemData[12], DateUtils.MM_DD_YY_HH_MM));
+		
+		return item;
 	}
 	
 

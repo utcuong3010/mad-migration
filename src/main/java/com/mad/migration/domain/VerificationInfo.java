@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.mad.migration.job.JobStatus;
 
-public class VerifyInfo {
+public class VerificationInfo {
 	
 	private String name;
 	private JobStatus status;
@@ -63,6 +63,4 @@ public class VerifyInfo {
 				+ ", failedItems=" + failedItems + ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
 
-	
-	
 }
