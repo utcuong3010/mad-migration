@@ -15,10 +15,6 @@ public class ItemReadListener implements ApplicationListener<ItemReadEvent> {
 	@Value("${mad.migration.homeDir}")
 	private String homeDirectory;
 	
-	public ItemReadListener() {
-		System.err.println("utcuong..............");
-	}
-
 	@Override
 	public void onApplicationEvent(ItemReadEvent event) {
 

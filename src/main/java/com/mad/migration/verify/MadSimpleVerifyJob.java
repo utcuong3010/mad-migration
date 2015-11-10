@@ -1,13 +1,11 @@
 package com.mad.migration.verify;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +17,7 @@ import com.mad.migration.domain.JobInfo;
 import com.mad.migration.domain.MadItemData;
 import com.mad.migration.domain.VerificationInfo;
 import com.mad.migration.job.JobStatus;
+import com.mad.migration.utils.DateUtils;
 import com.mad.migration.utils.FileUtils;
 
 @Component
@@ -61,6 +60,11 @@ public class MadSimpleVerifyJob implements VerifyJob,ApplicationContextAware {
 			String dataPath = homeDirectory + File.separator + "read-data" + File.separator + jobInfo.getJobName() + ".csv";
 			//init for each job
 			csvItemReader = applicationContext.getBean(CsvItemReader.class, dataPath);
+			//sleep
+			while(!csvItemReader.getInitialized().get()) {
+				Thread.sleep(1000);
+			}
+			int count=0;
 			
 			while(isContinue) {
 				
@@ -68,6 +72,7 @@ public class MadSimpleVerifyJob implements VerifyJob,ApplicationContextAware {
 				if(item == null) break;
 				//check
 				isSucceed = verifyItemProcessor.process(item);
+		
 				if(isSucceed) {
 					verifyInfo.setPassedItems(verifyInfo.getPassedItems() + 1);
 					
@@ -98,15 +103,14 @@ public class MadSimpleVerifyJob implements VerifyJob,ApplicationContextAware {
 		String reportPath = homeDirectory + File.separator + "verify-data" + File.separator + info.getName() + "_verification.txt";
 //		// write into log
 		StringBuilder contentReportBuilder = new StringBuilder("\n");
-		contentReportBuilder.append("******************************Verify Report*****************************\n");
+		contentReportBuilder.append("******************************[" + info.getName() +"]-Verify Report*****************************\n");
 		contentReportBuilder.append("Name:" + info.getName() + "\n");
 		contentReportBuilder.append("Total:" + info.getTotal() + "\n");
 		contentReportBuilder.append("Passed Items:" + info.getPassedItems() + "\n");
 		contentReportBuilder.append("Failed Items:" + info.getFailedItems() + "\n");
 		contentReportBuilder.append("Status:" + info.getStatus() + "\n");
-		contentReportBuilder.append("Started Date:" + new SimpleDateFormat("dd-MM-yyy hh:mm:zz").format(info.getStartDate())  + "\n");
-		contentReportBuilder.append("Ended Date:" + new SimpleDateFormat("dd-MM-yyy hh:mm:zz").format(info.getEndDate())  + "\n");
-		contentReportBuilder.append("******************************Verify Report*****************************\n");
+		contentReportBuilder.append("Started Date:" + DateUtils.formatDate(info.getStartDate(),DateUtils.dd_M_yyy_hh_mm_s)  + "\n");
+		contentReportBuilder.append("Ended Date:" + DateUtils.formatDate(info.getEndDate(),DateUtils.dd_M_yyy_hh_mm_s)  + "\n");
 		
 		logger.info(contentReportBuilder.toString());				
 		FileUtils.writeLog(reportPath,contentReportBuilder.toString());

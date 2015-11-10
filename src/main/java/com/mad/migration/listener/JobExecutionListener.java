@@ -35,10 +35,9 @@ public class JobExecutionListener implements ApplicationListener<JobExecutionEve
 		JobInfo jobInfo = new JobInfo();
 		try {			
 			jobInfo.setJobName(jobExecutionEvent.getJobName());
+			jobInfo	.setTotalItems(jobExecutionEvent.getTotalItems());
 			//look up in the context
 			VerifyJob verifyJob = applicationContext.getBean(VerifyJob.class);
-			System.err.println("trigger......." + verifyJob);
-			
 			verifyJob.doVerify(jobInfo);
 			logger.info("Verify job {} done",jobInfo);
 		} catch (Exception exception) {

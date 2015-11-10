@@ -2,10 +2,9 @@ package com.mad.migration.domain;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.directv.apg.mad.general.domain.SourceProgramType;
+import com.mad.migration.temp.SourceProgramType;
 import com.mad.migration.utils.DateUtils;
 
 public class MadItemData implements Serializable {
@@ -138,7 +137,7 @@ public class MadItemData implements Serializable {
 		item.setMediaVersion(Integer.valueOf(itemData[9]));
 		item.setState(Integer.valueOf(itemData[10]));
 		item.setMd5(itemData[11]);
-		item.setCreatedDate(DateUtils.toDate(itemData[12], DateUtils.MM_DD_YY_HH_MM));
+//		item.setCreatedDate(DateUtils.toDate(itemData[12], DateUtils.EEE_MMM_dd_yyyy_hh_mm_aaa));
 		
 		return item;
 	}

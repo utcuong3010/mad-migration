@@ -1,7 +1,6 @@
 package com.mad.migration.configuration;
 
 import java.io.File;
-import java.util.concurrent.Executor;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +42,8 @@ public class MadConfig implements InitializingBean{
 	}
 	
 	public void madInitializer() {
+		
+		
 		FileUtils.deleteFolder(homeDirectory);
 		//remove home directory
 		//create read-data

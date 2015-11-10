@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +31,17 @@ public class CsvItemReader implements InitializingBean {
 	@Autowired
 	private TaskExecutor taskExecutor;
 	
+	private AtomicBoolean initialized = new AtomicBoolean(false);
+	
 	
 	public CsvItemReader(String csvFile) {
 		this.csvFile = csvFile;
-		
-		System.err.println(csvFile);
 	}
 	
+	
+	public AtomicBoolean getInitialized() {
+		return initialized;
+	}
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -58,16 +63,19 @@ public class CsvItemReader implements InitializingBean {
 						MadItemData item = new MadItemData();
 						try {
 							item = item.recoveryData(itemData);
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						} catch (ParseException e) {						
+							logger.error("read file {} with error {}", csvFile,e);
 						}
-						System.err.println("item="+  item);
+						data.add(item);//add item
+						
+						initialized.set(true);
 
 					}
 
 				} catch (IOException e) {
 					logger.error("Reading csv {} with error",csvFile,e);
+					initialized.set(true);
+					
 				} finally {
 					if (br != null) {
 						try {

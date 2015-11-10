@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.mad.migration.domain.MigrationInfo;
 import com.mad.migration.event.ItemErrorEvent;
 import com.mad.migration.event.JobExecutionEvent;
+import com.mad.migration.utils.DateUtils;
 import com.mad.migration.utils.FileUtils;
 
 @Component
@@ -36,15 +37,15 @@ public class MigrationReport implements Report,ApplicationListener<ApplicationEv
 	
 		// write into log
 		StringBuilder contentReportBuilder = new StringBuilder("\n");
-		contentReportBuilder.append("******************************Migration Report*****************************\n");
+		contentReportBuilder.append("******************************[" + info.getName() +"]-Migration Report*****************************\n");
 		contentReportBuilder.append("Name:" + info.getName() + "\n");
 		contentReportBuilder.append("Total:" + info.getTotal() + "\n");
 		contentReportBuilder.append("Migrated Items:" + (info.getTotal() - info.getFailedItems()) + "\n");
 		contentReportBuilder.append("Failed Items:" + info.getFailedItems() + "\n");
 		contentReportBuilder.append("Status:" + info.getStatus() + "\n");
-		contentReportBuilder.append("Started Date:" + new SimpleDateFormat("dd-MM-yyy hh:mm").format(info.getStartDate())  + "\n");
-		contentReportBuilder.append("Ended Date:" + new SimpleDateFormat("dd-MM-yyy hh:mm").format(info.getEndDate())  + "\n");
-		contentReportBuilder.append("******************************Migration Report*****************************\n");
+		contentReportBuilder.append("Started Date:" + DateUtils.formatDate(info.getStartDate(),DateUtils.dd_M_yyy_hh_mm_s)  + "\n");
+		contentReportBuilder.append("Ended Date:" +  DateUtils.formatDate(info.getEndDate(),DateUtils.dd_M_yyy_hh_mm_s)  + "\n");
+		
 		
 		logger.info(contentReportBuilder.toString());
 				

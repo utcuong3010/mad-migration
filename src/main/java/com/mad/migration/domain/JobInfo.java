@@ -19,6 +19,13 @@ public class JobInfo {
 	public int getTotalItems() {
 		return totalItems;
 	}
+
+	@Override
+	public String toString() {
+		return "JobInfo [jobName=" + jobName + ", totalItems=" + totalItems + "]";
+	}
+	
+	
 	
 
 }

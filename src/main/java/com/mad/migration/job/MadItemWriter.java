@@ -38,7 +38,7 @@ public class MadItemWriter implements ItemWriter<VendorProgram> {
 	@Override
 	public void write(List<? extends VendorProgram> items) throws Exception {
 		
-		System.err.println("writer.....:" +  items);
+//		System.err.println("writer.....:" +  items);
 	
 		/*
 		for (VendorProgram program: items) {

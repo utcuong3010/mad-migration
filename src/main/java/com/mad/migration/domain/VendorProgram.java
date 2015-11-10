@@ -1,7 +1,7 @@
 package com.mad.migration.domain;
 
 
-import com.directv.apg.mad.general.domain.SourceProgramType;
+import com.mad.migration.temp.SourceProgramType;
 
 public class VendorProgram extends VendorMedia{
 

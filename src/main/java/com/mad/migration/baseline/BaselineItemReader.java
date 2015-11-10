@@ -4,26 +4,24 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.directv.apg.mad.general.domain.SourceProgramType;
 import com.mad.migration.domain.MadItemData;
 import com.mad.migration.domain.Vendor;
 import com.mad.migration.job.item.ItemReader;
+import com.mad.migration.temp.SourceProgramType;
+import com.mad.migration.utils.DateUtils;
 
 @Component(value="baselineItemReader")
 public class BaselineItemReader implements ItemReader<MadItemData> {
 
-	private int totalItems = 1;
+	private int totalItems = 10000;
 	private int count = 0;
-	
-	public BaselineItemReader() {
-		// TODO Auto-generated constructor stub
-	}
+
 	
 	@Override
 	public MadItemData read() throws Exception {
 		// TODO Auto-generated method stub
 		if(++count<=totalItems) {
-			System.err.println("Baseline read item");
+//			System.err.println("Baseline read item");
 			
 			MadItemData item = new MadItemData();
 			
@@ -31,6 +29,8 @@ public class BaselineItemReader implements ItemReader<MadItemData> {
 			item.setRootId("11");
 			item.setProgramType(SourceProgramType.SHOW);
 			item.setCreatedDate(new Date());
+			
+			
 			
 			item.setVendor(new Vendor("Baseline", "Baseline", "Baseline_thumbnail"));
 			
