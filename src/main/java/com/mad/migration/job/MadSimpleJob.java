@@ -24,7 +24,7 @@ public abstract class MadSimpleJob implements Job{
 
 	private String jobName;
 	
-	@Value("${mad.migration.chunkSize:5}")
+	@Value("${mad.migration.chunkSize:10}")
 	private int chunkSize;
 	
 	

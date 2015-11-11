@@ -24,7 +24,7 @@ public class TmsItemReader implements ItemReader<MadItemData>{
 	@Override
 	public int count() throws Exception {
 		// TODO Auto-generated method stub
-		return 100;
+		return movieReader.totalItems();
 	}
 	
 	

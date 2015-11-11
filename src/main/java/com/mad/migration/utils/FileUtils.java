@@ -1,11 +1,20 @@
 package com.mad.migration.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.compress.utils.IOUtils;
+import org.im4java.core.ConvertCmd;
+import org.im4java.core.IMOperation;
+import org.im4java.process.Pipe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,20 +31,20 @@ public class FileUtils {
 	 * @return
 	 */
 
-//	public static byte[] readFile(String absPath) {
-//		InputStream is = null;
-//		byte[] data = null;
-//		try {
-//			logger.info("Reading file:" + absPath);
-//			is = new FileInputStream(new File(absPath));
-//			data = IOUtils.toByteArray(is);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage(), e);
-//		} finally {
-//			IOUtils.closeQuietly(is);
-//		}
-//		return data;
-//	}
+	public static byte[] readFile(String absPath) {
+		InputStream is = null;
+		byte[] data = null;
+		try {
+			logger.info("Reading file:" + absPath);
+			is = new FileInputStream(new File(absPath));
+			data = IOUtils.toByteArray(is);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
+		return data;
+	}
 
 	public static String getFileExtension(String filePath) {
 
@@ -51,21 +60,21 @@ public class FileUtils {
 		return extension;
 	}
 
-//	public static String resizeImage(String base64, int width, int height) throws Exception {
-//		Base64 base64Util = new Base64();
-//		byte[] imageData = base64Util.decode(base64);
-//		IMOperation op = new IMOperation();
-//		op.addImage("-");
-//		op.resize(width, height);
-//		op.strip();
-//		op.addImage("-");
-//		byte[] output = process(op, imageData);
-//		if (output != null) {
-//			logger.info("Resize thumbnail image with size {}x{} successfully", width, height);
-//			return new Base64().encodeAsString(output);
-//		}
-//		return null;
-//	}
+	public static String resizeImage(String base64, int width, int height) throws Exception {
+		Base64 base64Util = new Base64();
+		byte[] imageData = base64Util.decode(base64);
+		IMOperation op = new IMOperation();
+		op.addImage("-");
+		op.resize(width, height);
+		op.strip();
+		op.addImage("-");
+		byte[] output = process(op, imageData);
+		if (output != null) {
+			logger.info("Resize thumbnail image with size {}x{} successfully", width, height);
+			return new Base64().encodeAsString(output);
+		}
+		return null;
+	}
 
 	/**
 	 * process image using image magic convert util
@@ -76,34 +85,34 @@ public class FileUtils {
 	 *            byte array contain image data
 	 * @return byte array contain image data after convert
 	 */
-//	private static byte[] process(IMOperation op, byte[] srcImage) {
-//		InputStream in = null;
-//		ByteArrayOutputStream out = null;
-//		ConvertCmd convert = null;
-//		try {
-//			in = new ByteArrayInputStream(srcImage);
-//			out = new ByteArrayOutputStream();
-//			Pipe pipeIn = new org.im4java.process.Pipe(in, null);
-//			Pipe pipeOut = new Pipe(null, out);
-//			convert = new ConvertCmd();
-//			convert.setSearchPath(BIN_PATH);
-//			convert.setInputProvider(pipeIn);
-//			convert.setOutputConsumer(pipeOut);
-//			logger.info("Resizing image with command: {}", convert.getCommand());
-//			convert.run(op);
-//			return out.toByteArray();
-//		} catch (Exception e) {
-//			if (convert != null) {
-//				logger.error("Error resizing image. Status: {}", convert.getErrorText(), e);
-//			} else {
-//				logger.error("Error resizing image. Status: {}", e);
-//			}
-//			return null;
-//		} finally {
-//			IOUtils.closeQuietly(in);
-//			IOUtils.closeQuietly(out);
-//		}
-//	}
+	private static byte[] process(IMOperation op, byte[] srcImage) {
+		InputStream in = null;
+		ByteArrayOutputStream out = null;
+		ConvertCmd convert = null;
+		try {
+			in = new ByteArrayInputStream(srcImage);
+			out = new ByteArrayOutputStream();
+			Pipe pipeIn = new org.im4java.process.Pipe(in, null);
+			Pipe pipeOut = new Pipe(null, out);
+			convert = new ConvertCmd();
+			convert.setSearchPath(BIN_PATH);
+			convert.setInputProvider(pipeIn);
+			convert.setOutputConsumer(pipeOut);
+			logger.info("Resizing image with command: {}", convert.getCommand());
+			convert.run(op);
+			return out.toByteArray();
+		} catch (Exception e) {
+			if (convert != null) {
+				logger.error("Error resizing image. Status: {}", convert.getErrorText(), e);
+			} else {
+				logger.error("Error resizing image. Status: {}", e);
+			}
+			return null;
+		} finally {
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(out);
+		}
+	}
 
 	/***
 	 * LOG all item

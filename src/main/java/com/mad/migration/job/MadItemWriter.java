@@ -37,10 +37,9 @@ public class MadItemWriter implements ItemWriter<VendorProgram> {
 	
 	@Override
 	public void write(List<? extends VendorProgram> items) throws Exception {
-		
-//		System.err.println("writer.....:" +  items);
 	
-		/*
+	
+		
 		for (VendorProgram program: items) {
 			//save program
 			jdbcTemplate.update(INSERT_VENDOR_PROGRAM,
@@ -72,7 +71,7 @@ public class MadItemWriter implements ItemWriter<VendorProgram> {
 			
 			
 		}
-		*/
+	
 		
 	}
 }

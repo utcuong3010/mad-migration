@@ -4,11 +4,10 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.directv.apg.mad.general.domain.SourceProgramType;
 import com.mad.migration.domain.MadItemData;
 import com.mad.migration.domain.Vendor;
 import com.mad.migration.job.item.ItemReader;
-import com.mad.migration.temp.SourceProgramType;
-import com.mad.migration.utils.DateUtils;
 
 @Component(value="baselineItemReader")
 public class BaselineItemReader implements ItemReader<MadItemData> {

@@ -60,11 +60,6 @@ public class MadSimpleVerifyJob implements VerifyJob,ApplicationContextAware {
 			String dataPath = homeDirectory + File.separator + "read-data" + File.separator + jobInfo.getJobName() + ".csv";
 			//init for each job
 			csvItemReader = applicationContext.getBean(CsvItemReader.class, dataPath);
-			//sleep
-			while(!csvItemReader.getInitialized().get()) {
-				Thread.sleep(1000);
-			}
-			int count=0;
 			
 			while(isContinue) {
 				

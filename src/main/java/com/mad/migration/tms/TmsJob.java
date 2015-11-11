@@ -6,7 +6,7 @@ import com.mad.migration.annotation.MadJob;
 import com.mad.migration.job.MadSimpleJob;
 import com.mad.migration.job.item.ItemReader;
 
-@MadJob(name="TMS",enable=false)
+@MadJob(name="TMS",enable=true)
 public class TmsJob extends MadSimpleJob {
 	
 

@@ -35,12 +35,12 @@
 			<scope>runtime</scope>
 		</dependency>
 		
-			<!-- including assetmanager
+			<!-- including assetmanager-->
 		<dependency>
 			<groupId>com.directv.mad</groupId>
 			<artifactId>assetmanager-client</artifactId>
 			<version>1.0.1-SNAPSHOT</version>		
-		</dependency> -->
+		</dependency> 
 		
 		
 		

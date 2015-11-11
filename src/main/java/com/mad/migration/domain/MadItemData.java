@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 
-import com.mad.migration.temp.SourceProgramType;
-import com.mad.migration.utils.DateUtils;
+import com.directv.apg.mad.general.domain.SourceProgramType;
 
 public class MadItemData implements Serializable {
 	
@@ -15,6 +14,7 @@ public class MadItemData implements Serializable {
 	private SourceProgramType programType;
 	private String mediaId;
 	private String mediaFilePath;
+	private String mediaThumbnailFilePath;
 	private int mediaVersion;
 	private int state;
 	private String md5;
@@ -113,6 +113,16 @@ public class MadItemData implements Serializable {
 
 	public void setProgramType(SourceProgramType programType) {
 		this.programType = programType;
+	}
+	
+	
+
+	public String getMediaThumbnailFilePath() {
+		return mediaThumbnailFilePath;
+	}
+
+	public void setMediaThumbnailFilePath(String mediaThumbnailFilePath) {
+		this.mediaThumbnailFilePath = mediaThumbnailFilePath;
 	}
 
 	@Override

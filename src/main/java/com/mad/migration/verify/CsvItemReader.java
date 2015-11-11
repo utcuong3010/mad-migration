@@ -39,10 +39,6 @@ public class CsvItemReader implements InitializingBean {
 	}
 	
 	
-	public AtomicBoolean getInitialized() {
-		return initialized;
-	}
-	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		data = new ConcurrentLinkedQueue<>();
@@ -92,6 +88,10 @@ public class CsvItemReader implements InitializingBean {
 	}
 	
 	public MadItemData read() throws Exception {
+		//waiting object initialized
+		while (!initialized.get()) {
+			Thread.sleep(1000);
+		}
 		return data.poll();		
 	}
 	
