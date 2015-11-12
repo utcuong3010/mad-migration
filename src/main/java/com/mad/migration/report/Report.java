@@ -1,5 +1,5 @@
 package com.mad.migration.report;
 
-public interface Report {
-	void doReport();
+public interface Report<T> {
+	void doReport(T info);
 }

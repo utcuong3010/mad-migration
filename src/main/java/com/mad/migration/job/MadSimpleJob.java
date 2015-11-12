@@ -79,10 +79,11 @@ public abstract class MadSimpleJob implements Job{
 		Object outItem = null;
 		List<Object> items = new ArrayList<>();
 		int totalItems = 0;
+		int processedItem = 0;
 		try {	
 			//get total items
 			totalItems = getReader().count();
-					
+				
 			//do execute		
 			while(isContinue) {
 				inItem = getReader().read();
@@ -115,21 +116,25 @@ public abstract class MadSimpleJob implements Job{
 				//repeat again
 				inItem = null;
 				outItem = null;
+				processedItem++;
+				
 			}
 			
 			jobExecution.setEndTime(new Date());
 			jobExecution.setJobStatus(JobStatus.COMPLETED);
-			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,jobExecution));
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,processedItem,jobExecution));
 			
 		} catch (Exception ex) {		
 						
 			jobExecution.setEndTime(new Date());
 			jobExecution.setJobStatus(JobStatus.ERROR);
-			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,jobExecution));
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,processedItem,jobExecution));
 			
 			//commit writer
 			if(items.size() > 0) {
+				
 				getWriter().write(items);//write them
+				
 			}	
 			throw ex;
 		}
