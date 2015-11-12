@@ -92,6 +92,10 @@ public abstract class MadSimpleJob implements Job{
 						outItem = getProcessor().process(inItem);//process item			
 					}catch(BusinessException  ex) {
 						applicationEventMulticaster.multicastEvent(new ItemErrorEvent(this, jobName,totalItems, inItem, ex));
+					} catch (Exception e) {
+						// TODO: handle exception
+						applicationEventMulticaster.multicastEvent(new ItemErrorEvent(this, jobName,totalItems, inItem, e));
+						throw e;
 					}
 				} else {
 					//stop

@@ -45,11 +45,12 @@ public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgra
 		try {
 			//read file content from tms data
 			byte[] image = FileUtils.readFile(item.getMediaFilePath());
+			byte[] thumbnail =  FileUtils.readFile(item.getMediaThumbnailFilePath());
 	        BufferedImage newImage = ImageIO.read(new ByteArrayInputStream(image));
 			String md5 = DigestUtils.md5Hex(image);
 			String extensionFile = FileUtils.getFileExtension(item.getMediaFilePath());
 			if(StringUtils.equals(md5, item.getMd5())) {
-				vendorProgram = storeInAssetManager(image, extensionFile, item.getVendor(), item);
+				vendorProgram = storeInAssetManager(image,thumbnail, extensionFile, item.getVendor(), item);
 				//mapping data 
 				vendorProgram.setProgramId(item.getProgramId());
 				vendorProgram.setProgramVersion(item.getProgramVersion());
@@ -78,7 +79,7 @@ public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgra
 			}
 		} catch (Exception ex) {
 			//log item to check manual
-			throw new ErrorException(ex.getMessage());			
+			throw new ErrorException("Process item with exception " + ex.getMessage());			
 		}
 		 	
 		return vendorProgram;
@@ -87,12 +88,13 @@ public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgra
 	
 	
 	
-	private VendorProgram storeInAssetManager(byte[] image,String extensionFile,Vendor vendor, MadItemData item) throws Exception {
+	private VendorProgram storeInAssetManager(byte[] image,byte[] thumbnail,String extensionFile,Vendor vendor, MadItemData item) throws Exception {
 		//store in asset manager
 		VendorProgram vendorProgram = new VendorProgram();
 	
 		SourceProgramType programType = item.getProgramType();
 		String imageBase64 = Base64.encodeBase64String(image);		
+		
 		AssetResponseObject responseObject = assetBuilderService.storeAssetObject(vendor.getContainerName(), imageBase64,
 				extensionFile, programType);
 		
@@ -100,14 +102,18 @@ public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgra
 			vendorProgram.setAssetDirectLink(responseObject.getAssetLink().getAssetDirectLink());
 			vendorProgram.setAssetIdentifier(responseObject.getAssetLink().getAssetIdentifier());
 			vendorProgram.setAssetUniversalLink(responseObject.getAssetLink().getAssetUniversalLink());
+		} else {
+			throw new Exception("Can not store image in Asset Mananger");
 		}
 		//create thumb nail image
-		String thumbnailBase64 = FileUtils.resizeImage(imageBase64, 80, 120);
+		String thumbnailBase64 = Base64.encodeBase64String(thumbnail);
 		AssetResponseObject thumbRespObject = assetBuilderService.storeAssetObject(vendor.getThumbnailContainerName(), thumbnailBase64, 
 				extensionFile, programType);
 		
 		if(thumbRespObject != null && thumbRespObject.getErrorMessages().isEmpty()) {
 			vendorProgram.setThumbnailAssetLink(thumbRespObject.getAssetLink().getAssetDirectLink());
+		} else {
+			throw new Exception("Can not store image in Asset Mananger");
 		}
 		return vendorProgram;
 	}

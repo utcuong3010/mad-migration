@@ -41,8 +41,11 @@ public class TmsMovieReader implements JdbcReader<MadItemData> {
 	private String vendorKey;
 	
 	
-	@Value("${mad.vendor.tms.movie.originalRepositoryDir}")
-	private String originalRepositoryDir;
+	@Value("${mad.vendor.tms.movie.original.directory}")
+	private String originalDirectory;
+	
+	@Value("${mad.vendor.tms.movie.thumbnail.directory}")
+	private String thumbnailDirectory;
 	
 	private int offset = 0;
 	
@@ -70,9 +73,8 @@ public class TmsMovieReader implements JdbcReader<MadItemData> {
 					tmsData.setRootId(result.getString("TMS_ROOT_ID"));
 					tmsData.setProgramType(SourceProgramType.MOVIE);
 					//TODO:need to set full path
-					
-			        
-					tmsData.setMediaFilePath(originalRepositoryDir + File.separator + tmsData.getRootId()+  File.separator + result.getString("filename"));					
+					tmsData.setMediaThumbnailFilePath(thumbnailDirectory + File.separator + tmsData.getRootId()+  File.separator + result.getString("filename"));			        
+					tmsData.setMediaFilePath(originalDirectory + File.separator + tmsData.getRootId()+  File.separator + result.getString("filename"));					
 			        try {
 			        	byte[] image = FileUtils.readFile(tmsData.getMediaFilePath());
 						BufferedImage newImage = ImageIO.read(new ByteArrayInputStream(image));						
@@ -103,10 +105,10 @@ public class TmsMovieReader implements JdbcReader<MadItemData> {
 	@Override
 	public int totalItems() throws DataAccessException {
 		
-		String totalItems = "SELECT t1.TMS_ID,t1.TMS_ROOT_ID,t1.version as programVersion,t2.filename,t2.VERSION as mediaVersion,t2.state,t2.md5 ,t2.created_date "
+		String totalItems = "SELECT count(*) "
 				+ " FROM tms_movie_program_info as t1 "
 				+ " INNER JOIN  tms_movie_poster_image_info as t2 "
-				+ " ON t1.TMS_ROOT_ID=t2.TMS_ROOT_ID AND t2.state=0 group by tms_id,tms_root_id,mediaVersion ";
+				+ " ON t1.TMS_ROOT_ID=t2.TMS_ROOT_ID AND t2.state=0 group by t1.tms_id,t2.tms_root_id,t2.VERSION ";
 		
 		return jdbcTemplate.queryForObject(totalItems,Integer.class);
 				
