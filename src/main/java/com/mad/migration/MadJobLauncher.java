@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.core.task.TaskExecutor;
@@ -25,6 +26,9 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 	
 	private List<Job> jobs = new ArrayList<>();
 	
+	@Value("${mad.enable.venrdors}")
+	private List<String> enableVendors;
+	
 	@Autowired
 	private TaskExecutor taskExecutor;
 	
@@ -35,7 +39,8 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if(bean.getClass().isAnnotationPresent(MadJob.class)) {
 			MadJob madJob = bean.getClass().getAnnotation(MadJob.class);
-			if(madJob.enable()) {
+			
+			if(enableVendors.contains(madJob.name())) {
 				//set job name
 				Job job = (Job)bean;
 				job.setJobName(madJob.name());
@@ -70,10 +75,6 @@ public class MadJobLauncher implements BeanPostProcessor,JobLauncher {
 		}		
 	}
 
-	
-	
-	
-	
-	
+
 
 }

@@ -1,31 +1,34 @@
 package com.mad.migration.tms;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.mad.migration.domain.MadItemData;
-import com.mad.migration.job.item.ItemReader;
+import com.mad.migration.job.JdbcReader;
+import com.mad.migration.job.MadItemReader;
 
 
 @Component
-public class TmsItemReader implements ItemReader<MadItemData>{
+@Lazy(value=true)
+public class TmsItemReader extends MadItemReader{
 
 	@Autowired
 	private TmsMovieReader movieReader;
-
-	@Override
-	public MadItemData read() throws Exception {
-		MadItemData itemData = movieReader.read();
-		//TODO: read next 
-		return itemData;
-	}
 	
 	@Override
-	public int count() throws Exception {
-		// TODO Auto-generated method stub
-		return movieReader.totalItems();
+	public List<JdbcReader<MadItemData>> initialingReaders() {
+		
+		List<JdbcReader<MadItemData>>list = new ArrayList<>();
+		list.add(movieReader);
+	
+		return list;
 	}
+	
 	
 	
 }

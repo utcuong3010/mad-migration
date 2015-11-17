@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.event.ApplicationEventMulticaster;
 
 import com.mad.migration.event.ItemErrorEvent;
@@ -39,17 +41,15 @@ public abstract class MadSimpleJob implements Job{
 	}
 	
 	@Autowired
-	@Qualifier(value="madItemProcessor")
-	private ItemProcessor itemProcessor;
+	private ItemProcessor madItemProcessor;
 	public ItemProcessor getProcessor() {
-		return itemProcessor;
+		return madItemProcessor;
 	}
 	
 	@Autowired
-	@Qualifier(value="madItemWriter")
-	private ItemWriter itemWriter;
+	private ItemWriter madItemWriter;
 	public ItemWriter getWriter() {
-		return itemWriter;
+		return madItemWriter;
 	}
 	
 	@Override
@@ -80,6 +80,7 @@ public abstract class MadSimpleJob implements Job{
 		List<Object> items = new ArrayList<>();
 		int totalItems = 0;
 		int processedItem = 0;
+		int failedItem = 0;
 		try {	
 			//get total items
 			totalItems = getReader().count();
@@ -93,6 +94,7 @@ public abstract class MadSimpleJob implements Job{
 						outItem = getProcessor().process(inItem);//process item			
 					}catch(BusinessException  ex) {
 						applicationEventMulticaster.multicastEvent(new ItemErrorEvent(this, jobName,totalItems, inItem, ex));
+						failedItem++;
 					} catch (Exception e) {
 						// TODO: handle exception
 						applicationEventMulticaster.multicastEvent(new ItemErrorEvent(this, jobName,totalItems, inItem, e));
@@ -122,13 +124,13 @@ public abstract class MadSimpleJob implements Job{
 			
 			jobExecution.setEndTime(new Date());
 			jobExecution.setJobStatus(JobStatus.COMPLETED);
-			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,processedItem,jobExecution));
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,processedItem,failedItem,jobExecution));
 			
 		} catch (Exception ex) {		
 						
 			jobExecution.setEndTime(new Date());
 			jobExecution.setJobStatus(JobStatus.ERROR);
-			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,processedItem,jobExecution));
+			applicationEventMulticaster.multicastEvent(new JobExecutionEvent(this, jobName,totalItems,processedItem-items.size(),failedItem,jobExecution));
 			
 			//commit writer
 			if(items.size() > 0) {

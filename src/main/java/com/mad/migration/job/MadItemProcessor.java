@@ -24,7 +24,7 @@ import com.mad.migration.job.item.ItemProcessor;
 import com.mad.migration.utils.FileUtils;
 import com.mad.migration.utils.ImageUtil;
 
-@Component(value="madItemProcessor")
+@Component
 public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgram> {
 	
 
@@ -54,6 +54,8 @@ public class MadItemProcessor implements ItemProcessor<MadItemData, VendorProgra
 				//mapping data 
 				vendorProgram.setProgramId(item.getProgramId());
 				vendorProgram.setProgramVersion(item.getProgramVersion());
+				vendorProgram.setProgramType(item.getProgramType());
+				vendorProgram.setRootId(item.getRootId());
 				vendorProgram.setVendorKey(item.getVendor().getVendorKey());
 				vendorProgram.setMediaId(item.getMediaId());
 				vendorProgram.setMediaVersion(item.getMediaVersion());

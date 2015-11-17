@@ -17,10 +17,5 @@ public @interface MadJob {
 	 * @return
 	 */
 	String name() default "";
-	
-	/***
-	 * disable or not
-	 * @return
-	 */
-	boolean enable() default true;
+
 }

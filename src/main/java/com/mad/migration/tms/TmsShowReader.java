@@ -25,9 +25,9 @@ import com.mad.migration.job.JdbcReader;
 import com.mad.migration.utils.FileUtils;
 
 @Component
-public class TmsMovieReader implements JdbcReader<MadItemData> {
+public class TmsShowReader implements JdbcReader<MadItemData> {
 	
-	private Logger LOG = LoggerFactory.getLogger(TmsMovieReader.class);
+	private Logger LOG = LoggerFactory.getLogger(TmsShowReader.class);
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -58,7 +58,7 @@ public class TmsMovieReader implements JdbcReader<MadItemData> {
 			
 			String movieSql = "SELECT t1.TMS_ID,t1.TMS_ROOT_ID,t1.version as programVersion,t2.filename,t2.VERSION as mediaVersion,t2.state,t2.md5 ,t2.created_date "
 					+ " FROM tms_movie_program_info as t1 "
-					+ " INNER JOIN  tms_movie_poster_image_info as t2 "
+					+ " INNER JOIN  tms_showcard_banner_image_info as t2 "
 					+ " ON t1.TMS_ROOT_ID=t2.TMS_ROOT_ID AND t2.state=0"
 					+ " limit 10 offset " + offset;
 			

@@ -47,7 +47,7 @@ public class MigrationReport implements Report<MigrationInfo>,ApplicationListene
 
 	@Override
 	public void onApplicationEvent(JobExecutionEvent event) {
-		System.err.println("event---" + Thread.currentThread().getName());
+	
 		if(event instanceof JobExecutionEvent) {
 			MigrationInfo info = new MigrationInfo();
 			JobExecutionEvent jobEvent = (JobExecutionEvent)event;

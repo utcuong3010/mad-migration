@@ -23,8 +23,8 @@ public class MadConfig implements InitializingBean{
 	@Bean
 	public TaskExecutor taskExecutor() {
 		ThreadPoolTaskExecutor threadPoolExecutor = new ThreadPoolTaskExecutor();
-		threadPoolExecutor.setCorePoolSize(10);
-		threadPoolExecutor.setMaxPoolSize(20);
+		threadPoolExecutor.setCorePoolSize(20);
+		threadPoolExecutor.setMaxPoolSize(40);
 		threadPoolExecutor.setQueueCapacity(100);	
 //		threadPoolExecutor.setAwaitTerminationSeconds(awaitTerminationSeconds);
 		threadPoolExecutor.setAllowCoreThreadTimeOut(true);
